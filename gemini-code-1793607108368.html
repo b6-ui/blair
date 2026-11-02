@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엘링턴 대학교 에브리타임</title>
+  <style>
+    :root {
+      --primary: #c62917;
+      --primary-hover: #a01f10;
+      --bg-gray: #f4f5f7;
+      --card-bg: #ffffff;
+      --border: #e3e3e3;
+      --text-main: #292929;
+      --text-sub: #737373;
+      --text-light: #a6a6a6;
+      --hot-bg: #fff5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-gray);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .logo-badge {
+      background-color: var(--primary);
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .school-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .school-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .school-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background-color: #f9f9f9;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Nav Tabs */
+    nav {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .nav-item {
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-sub);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Layout Main */
+    .main-container {
+      max-width: 1000px;
+      margin: 16px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 16px;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+    }
+
+    /* Feed & Post Writer */
+    .post-writer {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .post-writer textarea {
+      width: 100%;
+      height: 70px;
+      border: none;
+      resize: none;
+      outline: none;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .post-writer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #f0f0f0;
+      padding-top: 10px;
+      margin-top: 6px;
+    }
+
+    .writer-options {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .btn-submit {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background-color: var(--card-bg);
+      font-size: 12px;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Post Card */
+    .post-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .post-card:hover {
+      border-color: #b0b0b0;
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .author-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background-color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .author-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .post-time {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    .post-category {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 600;
+      background-color: var(--hot-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .post-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .post-content {
+      font-size: 13px;
+      color: #4a4a4a;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .post-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-light);
+      border-top: 1px solid #f9f9f9;
+      padding-top: 10px;
+    }
+
+    .post-stats {
+      display: flex;
+      gap: 12px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat-item.like {
+      color: var(--primary);
+    }
+
+    .stat-item.comment {
+      color: #059669;
+    }
+
+    /* Notification Toast Bar */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 2000;
+    }
+
+    .toast {
+      background-color: #323232;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Modal (Post View) */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      border-radius: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: white;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-sub);
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .comment-section {
+      background-color: #fafafa;
+      border-top: 1px solid var(--border);
+      padding: 16px 20px;
+    }
+
+    .comment-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .comment-item:last-child {
+      border-bottom: none;
+    }
+
+    .comment-author {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .comment-text {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    .comment-input-box {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .comment-input-box input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    /* Sidebar Widgets */
+    .widget {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .widget-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .widget-title span {
+      color: var(--primary);
+    }
+
+    .hot-list {
+      list-style: none;
+    }
+
+    .hot-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .hot-item:last-child {
+      border-bottom: none;
+    }
+
+    .hot-item-title {
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hot-item-sub {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 2px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo" onclick="renderFeed('all')">
+        <div class="logo-badge">에타</div>
+        <div class="school-info">
+          <span class="school-name">엘링턴 대학교</span>
+          <span class="school-sub">Ellington University</span>
+        </div>
+      </div>
+      <div class="user-actions">
+        <div class="user-profile-btn">
+          <span>👤 익명님</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-item active" onclick="filterCategory('all', this)">전체 피드</div>
+      <div class="nav-item" onclick="filterCategory('자유게시판', this)">자유게시판</div>
+      <div class="nav-item" onclick="filterCategory('HOT게시판', this)">🔥 HOT 게시판</div>
+      <div class="nav-item" onclick="filterCategory('비밀게시판', this)">🔒 비밀게시판</div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    
+    <!-- Feed Area -->
+    <main>
+      <!-- Post Writer -->
+      <div class="post-writer">
+        <textarea id="writerContent" placeholder="엘링턴 대학교 에타에 솔직한 이야기를 남겨보세요."></textarea>
+        <div class="post-writer-bottom">
+          <div class="writer-options">
+            <select id="writerBoard" style="border: 1px solid var(--border); padding: 4px; border-radius: 4px; font-size: 12px;">
+              <option value="자유게시판">자유게시판</option>
+              <option value="비밀게시판">비밀게시판</option>
+            </select>
+          </div>
+          <button class="btn-submit" onclick="createPost()">글 쓰기</button>
+        </div>
+      </div>
+
+      <!-- Feed Filter -->
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="sortFeed('latest', this)">최신순</button>
+        <button class="filter-btn" onclick="sortFeed('popular', this)">인기순</button>
+      </div>
+
+      <!-- Feed Posts Container -->
+      <div id="postsContainer"></div>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      
+      <!-- Realtime HOT Posts -->
+      <div class="widget">
+        <div class="widget-title">
+          <span>🔥 실시간 HOT 게시글</span>
+        </div>
+        <ul class="hot-list" id="hotList"></ul>
+      </div>
+
+      <!-- Popular Keywords -->
+      <div class="widget">
+        <div class="widget-title">실시간 검색어</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="font-size: 12px; padding: 4px 8px; background: #eee; border-radius: 12px; color: var(--primary); font-weight: bold;">1. 블레어</span>
+          <span style="font-size: 12px; padding: 4px 8px; background: #eee; border-radius: 12px;">2. 치어리더 파티</span>
+          <span style="font-size: 12px; padding: 4px 8px; background: #eee; border-radius: 12px;">3. 경영학과 족보</span>
+          <span style="font-size: 12px; padding: 4px 8px; background: #eee; border-radius: 12px;">4. 퀸비 착장</span>
+          <span style="font-size: 12px; padding: 4px 8px; background: #eee; border-radius: 12px;">5. 샤넬 백</span>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modal for Post Detail -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="modalBoard" class="post-category">게시판</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="author-info" style="margin-bottom: 12px;">
+          <div class="author-avatar">👤</div>
+          <div>
+            <div class="author-name">익명</div>
+            <div class="post-time" id="modalTime">방금 전</div>
+          </div>
+        </div>
+        <h2 id="modalTitle" style="font-size: 18px; margin-bottom: 10px;"></h2>
+        <p id="modalContent" style="font-size: 14px; line-height: 1.6; color: #333; white-space: pre-line;"></p>
+        
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+          <button class="btn-submit" style="background: #fff; color: var(--primary); border: 1px solid var(--primary);" onclick="likeCurrentPost()">
+            👍 공감 <span id="modalLikeCount">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="comment-section">
+        <div style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">댓글</div>
+        <div id="modalCommentsContainer"></div>
+        <div class="comment-input-box">
+          <input type="text" id="commentInput" placeholder="댓글을 입력하세요..." onkeydown="if(event.key==='Enter') addComment()">
+          <button class="btn-submit" onclick="addComment()">등록</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let posts = [
+      {
+        id: 1,
+        board: "HOT게시판",
+        author: "익명",
+        time: "10분 전",
+        title: "방금 본관 앞에서 블레어 휘트모어 걸어가는 거 본 사람??",
+        content: "키 175라는데 힐까지 신어서 포스 미쳤음... 금발 포니테일 흔들면서 지나가는데 진짜 다른 세계 사람 같다. 옆에 치어리딩팀 애들 모아놓고 은근 위아래로 훑어보면서 옷 지적하는 거 같던데 퀸비 포스 지림 ㄷㄷ",
+        likes: 142,
+        comments: [
+          { author: "익명", text: "실물 미쳤긴 함. 샤넬 신상 백 들고 있더라" },
+          { author: "익명", text: "가까이서 봤는데 눈빛 날카로워서 눈 마주치면 얼어붙음.." },
+          { author: "익명", text: "근데 블레어 성격 진짜 오만하긴 함. 자기 마음에 안 들면 바로 무시함" },
+          { author: "익명", text: "아시아계 유학생한테 대놓고 빈정거리는 거 본 적 있음... 인종 차별 오짐" }
+        ]
+      },
+      {
+        id: 2,
+        board: "자유게시판",
+        author: "익명",
+        time: "25분 전",
+        title: "오늘 치어리더팀 캡틴한테 'B'라고 불렀다가 뒤질 뻔함;;",
+        content: "동아리 홍보 부스 지나가다가 친근한 척 '어 B 선배님 안녕하세요!' 했는데... 블레어 눈빛 갑자기 싹 차가워지면서 위아래로 대놓고 훑어보더니\n\"아, 너도 여기 있었어? 미안, 전혀 못 봤네. 그리고 날 B라고 부를 수 있는 건 내 진짜 친구들뿐이야.\" 하고 쌩 지나감...\n나 엘링턴대 매장당하는 부분이냐...?",
+        likes: 89,
+        comments: [
+          { author: "익명", text: "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ 미쳤냐 B는 친한 애들만 부르는 애칭임 ㅋㅋㅋ" },
+          { author: "익명", text: "선틀어막고 사과해라 블레어 가문 파워 알잖아..." },
+          { author: "익명", text: "블레어한테 밉보이면 엘링턴대 사교계 파티 평생 못 감 ㅅㄱ" }
+        ]
+      },
+      {
+        id: 3,
+        board: "비밀게시판",
+        author: "익명",
+        time: "40분 전",
+        title: "블레어 휘트모어 금요일 풀사이드 파티 초대장 받은 사람?",
+        content: "이번에 자택 저택에서 웰컴 파티 연다는데 라인업 미쳤다며? 집안 재력 엄청나다더니 엘링턴 인기남녀 다 부른 듯. 못 가면 솔직히 교내 비인싸 인증임..",
+        likes: 54,
+        comments: [
+          { author: "익명", text: "나 초대받음 ㅎㅎ" },
+          { author: "익명", text: "가난한 유학생들은 쳐다도 안 봄 ㅋㅋㅋ 사람 평가 기준이 집안이랑 브랜드임" },
+          { author: "익명", text: "옷 촌스럽게 입고 가면 입구컷 당한다 조심해라" }
+        ]
+      },
+      {
+        id: 4,
+        board: "자유게시판",
+        author: "익명",
+        time: "1시간 전",
+        title: "오늘 블레어가 어떤 애 한 테 한 빈정거림 짤 ㅋㅋㅋ",
+        content: "\"그 옷은 정말 네 취향이야? 독특하다.\" 라면서 눈 찡긋하는데 당한 애 얼굴 붉어지고 난리 남 ㅋㅋㅋ 은근히 사람 깎아내리는 말에 천재임 진짜 ㅋㅋㅋ",
+        likes: 110,
+        comments: [
+          { author: "익명", text: "블레어한테 관심 못 받고 무시당하는 것보다 저런 빈정거림이라도 받는 게 낫다는 애들도 있음 ㅋㅋㅋ" },
+          { author: "익명", text: "자기애 미쳐서 남들한테 굽신거림 받는 거 엄청 즐김" }
+        ]
+      }
+    ];
+
+    let currentCategory = 'all';
+    let currentSort = 'latest';
+    let activePostId = null;
+
+    function renderFeed(category = currentCategory) {
+      currentCategory = category;
+      const container = document.getElementById('postsContainer');
+      container.innerHTML = '';
+
+      let filtered = posts;
+      if (category === 'HOT게시판') {
+        filtered = posts.filter(p => p.likes >= 60 || p.board === 'HOT게시판');
+      } else if (category !== 'all') {
+        filtered = posts.filter(p => p.board === category);
+      }
+
+      if (currentSort === 'popular') {
+        filtered.sort((a, b) => b.likes - a.likes);
+      } else {
+        filtered.sort((a, b) => b.id - a.id);
+      }
+
+      filtered.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.onclick = () => openModal(post.id);
+        card.innerHTML = `
+          <div class="post-header">
+            <div class="author-info">
+              <div class="author-avatar">👤</div>
+              <div>
+                <span class="author-name">익명</span>
+                <span class="post-time">${post.time}</span>
+              </div>
+            </div>
+            <span class="post-category">${post.board}</span>
+          </div>
+          <div class="post-title">${post.title}</div>
+          <div class="post-content">${post.content}</div>
+          <div class="post-footer">
+            <span style="color: var(--text-light);">엘링턴대 커뮤니티</span>
+            <div class="post-stats">
+              <div class="stat-item like">👍 ${post.likes}</div>
+              <div class="stat-item comment">💬 ${post.comments.length}</div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      renderSidebarHot();
+    }
+
+    function renderSidebarHot() {
+      const hotList = document.getElementById('hotList');
+      hotList.innerHTML = '';
+      
+      const sorted = [...posts].sort((a, b) => b.likes - a.likes).slice(0, 4);
+      sorted.forEach(p => {
+        const li = document.createElement('li');
+        li.className = 'hot-item';
+        li.onclick = () => openModal(p.id);
+        li.innerHTML = `
+          <div class="hot-item-title">${p.title}</div>
+          <div class="hot-item-sub">
+            <span>${p.board}</span>
+            <span style="color: var(--primary);">👍 ${p.likes}</span>
+          </div>
+        `;
+        hotList.appendChild(li);
+      });
+    }
+
+    function filterCategory(cat, el) {
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      if(el) el.classList.add('active');
+      renderFeed(cat);
+    }
+
+    function sortFeed(type, el) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      currentSort = type;
+      renderFeed();
+    }
+
+    function createPost() {
+      const content = document.getElementById('writerContent').value.trim();
+      const board = document.getElementById('writerBoard').value;
+
+      if (!content) {
+        alert('내용을 입력해주세요!');
+        return;
+      }
+
+      const newPost = {
+        id: Date.now(),
+        board: board,
+        author: "익명",
+        time: "방금 전",
+        title: content.length > 25 ? content.substring(0, 25) + '...' : content,
+        content: content,
+        likes: 0,
+        comments: []
+      };
+
+      posts.unshift(newPost);
+      document.getElementById('writerContent').value = '';
+      renderFeed();
+
+      // 키워드 자동 댓글 및 알림 트리거
+      generateAutoComments(newPost);
+    }
+
+    // 알림 토스트 띄우기 함수
+    function showToast(message, postId) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `💬 <span>${message}</span>`;
+      toast.onclick = () => {
+        openModal(postId);
+        toast.remove();
+      };
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.remove();
+        }
+      }, 4000);
+    }
+
+    // 키워드 반응형 자동 익명 댓글
+    function generateAutoComments(post) {
+      const text = post.content;
+      let autoReplies = [];
+
+      // 1. 블레어 싫음 / 별로 관련 (요청 조건 추가 반영)
+      if (text.includes("싫어") || text.includes("싫음") || text.includes("별로") || text.includes("비호감")) {
+        autoReplies.push("나도 좀... 예쁘고 집안 좋은 거 알겠는데 인성 너무 빡셈");
+        autoReplies.push("야야 글 지워라 빨리 블레어가 보면 너 진짜 아웃임;;");
+      }
+
+      // 2. 남친 유무 관련
+      else if (text.includes("남친") || text.includes("남자친구") || text.includes("연애")) {
+        autoReplies.push("몰라 아직까지 블레어한테 차인 남자만 수두룩 ㅋㅋ");
+        autoReplies.push("블레어 눈높아서 웬만한 가문이나 인물 아니면 눈길도 안 줌");
+      }
+
+      // 3. 고백 관련
+      else if (text.includes("고백")) {
+        autoReplies.push("ㅋㅋㅋㅋㅋㅋㅋ너 ㅈ돼!!");
+        autoReplies.push("공개 망신 당하고 학교 자퇴하고 싶으면 고백 ㄱㄱ");
+      }
+
+      // 4. 대단해? / 누구임? 관련
+      else if (text.includes("대단해") || text.includes("얼마나") || text.includes("그정도로") || text.includes("누구임") || text.includes("누구냐") || text.includes("누군데")) {
+        autoReplies.push("ㅁ친 ㅋㅋㅋ 너 엘링턴대 신입생이냐?");
+        autoReplies.push("얘 뭐냐 ㅋㅋㅋㅋ 블레어 가문 파워 모름?");
+      }
+
+      // 5. 찍힘 / 밉보임 관련
+      else if (text.includes("찍힘") || text.includes("찍혔") || text.includes("밉보")) {
+        autoReplies.push("힘내라... 사교계 자격 박탈임");
+        autoReplies.push("ㄷㄷ 혹시 유서 작성해둠?");
+      }
+
+      // 6. 블레어 일반 언급
+      else if (text.includes("블레어") || text.includes("퀸비")) {
+        autoReplies.push("ㅋㅋ 블레어 얘기 또 나왔네 역시 엘링턴 실세");
+        autoReplies.push("얘 위아래로 훑어볼 때 눈빛 진짜 살벌함");
+      }
+
+      // 7. B 언급
+      else if (text.includes("B") || text.includes("비")) {
+        autoReplies.push("B라고 함부로 부르다가 낭패 본 애 여럿임 ㅋㅋㅋ 조심해라");
+      }
+
+      // 키워드가 없을 경우 기본 반응
+      if (autoReplies.length === 0) {
+        autoReplies.push("ㄹㅇㅋㅋㅋㅋ");
+        autoReplies.push("이거 맞다");
+      }
+
+      // 1초 뒤 자동 댓글 작성 및 알림 팝업 띄우기
+      setTimeout(() => {
+        autoReplies.forEach(replyText => {
+          post.comments.push({
+            author: "익명",
+            text: replyText
+          });
+        });
+        
+        renderFeed();
+        if (activePostId === post.id) {
+          renderModalComments(post.comments);
+        }
+
+        // 댓글 등록 토스트 알림 표시
+        showToast(`새로운 댓글이 달렸습니다: "${autoReplies[0]}"`, post.id);
+      }, 1000);
+    }
+
+    function openModal(id) {
+      activePostId = id;
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      document.getElementById('modalBoard').innerText = post.board;
+      document.getElementById('modalTime').innerText = post.time;
+      document.getElementById('modalTitle').innerText = post.title;
+      document.getElementById('modalContent').innerText = post.content;
+      document.getElementById('modalLikeCount').innerText = post.likes;
+
+      renderModalComments(post.comments);
+      document.getElementById('postModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('postModal').classList.remove('active');
+      activePostId = null;
+    }
+
+    function renderModalComments(comments) {
+      const container = document.getElementById('modalCommentsContainer');
+      container.innerHTML = '';
+
+      if (comments.length === 0) {
+        container.innerHTML = '<div style="font-size:12px; color:var(--text-light); padding:10px 0;">첫 댓글을 남겨보세요!</div>';
+        return;
+      }
+
+      comments.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = `
+          <div class="comment-author">익명</div>
+          <div class="comment-text">${c.text}</div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function addComment() {
+      const input = document.getElementById('commentInput');
+      const text = input.value.trim();
+      if (!text || !activePostId) return;
+
+      const post = posts.find(p => p.id === activePostId);
+      if (post) {
+        post.comments.push({
+          author: "익명",
+          text: text
+        });
+        input.value = '';
+        renderModalComments(post.comments);
+        renderFeed();
+      }
+    }
+
+    function likeCurrentPost() {
+      if (!activePostId) return;
+      const post = posts.find(p => p.id === activePostId);
+      if (post) {
+        post.likes += 1;
+        document.getElementById('modalLikeCount').innerText = post.likes;
+        renderFeed();
+      }
+    }
+
+    renderFeed();
+  </script>
+</body>
+</html>
